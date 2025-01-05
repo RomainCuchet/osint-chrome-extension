@@ -3,7 +3,12 @@
   "name": "OsintExt",
   "description": "OsintExt is a chrome extension that provides osint functionalities.",
   "version": "1.0",
-  "permissions": ["activeTab", "contextMenus","scripting","tabs"],
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "scripting",
+    "tabs"
+  ],
   "background": {
     "service_worker": "background.bundle.js"
   },
@@ -22,6 +27,18 @@
     "64": "assets/icons/icon64.png",
     "128": "assets/icons/icon128.png",
     "512": "assets/icons/icon512.png"
-  }
+  },
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/icons/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+
 }
   

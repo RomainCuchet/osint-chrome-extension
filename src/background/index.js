@@ -5,6 +5,8 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ["image"]
   });
 });
+
+
   
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "imageMetadata") {
@@ -15,5 +17,3 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     });
   }
 });
-
-console.log("Background script running");
