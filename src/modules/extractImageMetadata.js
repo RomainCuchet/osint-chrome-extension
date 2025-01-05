@@ -1,9 +1,14 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log("Received message", message);
-    if (message.action === "getImageMetadata") {
-        const imageUrl = message.imageUrl;
-        const tab = message.tab;
+import EXIF from 'exif.js';
 
+/**
+ * Extracts metadata from an image and associated tab information.
+ *
+ * @param {string} imageUrl - The URL of the image to process.
+ * @param {object} tab - An object representing the tab information (e.g., URL).
+ * @returns {Promise<string>} A promise that resolves to the metadata string or rejects with an error.
+ */
+export function extractImageMetadata(imageUrl, tab) {
+    return new Promise((resolve, reject) => {
         const img = new Image();
         img.crossOrigin = "Anonymous"; // Enable cross-origin image loading
         img.src = imageUrl;
@@ -34,20 +39,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 metadata += "Error retrieving EXIF metadata: " + error.message + "\n";
             }
 
-            metadata += `URL of the image: ${imageUrl}\nDimensions: ${img.width}x${img.height} px\nFormat: ${imageUrl.split('.').pop()}\n`
+            metadata += `URL of the image: ${imageUrl}\nDimensions: ${img.width}x${img.height} px\nFormat: ${imageUrl.split('.').pop()}\n`;
             metadata += `Page URL: ${tab.url}\n`;
 
-            console.log(metadata);
-            sendResponse({ success: true, metadata: metadata });
+            resolve(metadata);
         };
 
         img.onerror = function () {
-            sendResponse({ success: false, error: "Unable to load the image or unsupported format." });
+            reject("Unable to load the image or unsupported format.");
         };
-
-        // Keep the message channel open for asynchronous response
-        return true;
-    }
-});
-
-console.log("Content script running");
+    });
+}
